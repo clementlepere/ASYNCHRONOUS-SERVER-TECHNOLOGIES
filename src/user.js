@@ -1,8 +1,8 @@
 module.exports = {
-"name":"clement",
-"lastname":"l",
-getName(){
-return this.name
-}
-
+  get: function(user, callback) {
+    return callback(user);
+  },
+  save: function(id, callback) {
+    return callback(id);
+  }
 }
