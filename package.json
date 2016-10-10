@@ -1,7 +1,10 @@
 {
-	"name": "ast-test-2016",
-	"author": "clement l",
-	"description": "test project",
-	"dependencies": {},
-	"devDependencies": {}
+  "name": "ast-test-2016",
+  "author": "clement l",
+  "description": "test project",
+  "dependencies": {
+    "mocha": "^3.1.1",
+    "should": "^11.1.0"
+  },
+  "devDependencies": {}
 }
