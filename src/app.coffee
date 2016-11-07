@@ -1,23 +1,22 @@
-# Import a module
-http = require 'http'
-user = require './user.coffee'
-url = require 'url'
-fs = require 'fs'
+var express = require('express');
+var app = express();
 
-# Declare an http server
-http.createServer (req, res) ->
+app.get('/', function (req, res) {
+  res.send('Hello World!');
+});
 
-  path = url.parse(req.url).pathname
+app.post('/', function (req, res) {
+  res.send('POST request to homepage');
+});
 
-  user.get "cesar", (id) ->
-    # Write a response header
-    res.writeHead 200,
-      'Content-Type': 'text/plain'
+app.put('/', function (req, res) {
+  res.send('PUT request to homepage');
+});
 
-    # Write a response content
-    #res.end('Hello World\n');`
-    res.end "hello #{id}" # "hello" + id
+app.delete('/', function (req, res) {
+  res.send('DELETE request to homepage');
+});
 
-# Start the server
-.listen 1337, '127.0.0.1', () ->
-  console.log "running on 127.0.0.1:1337"
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+});
