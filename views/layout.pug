@@ -1,0 +1,24 @@
+doctype html
+html(lang='en')
+
+head
+  title AST
+  link
+  script
+  script(src='/js/boostrap.min.js')
+
+body
+  p hello#{name}!
+  button(type=
+  "button" class=  "btn btn-success" id=  "show-metrics") Bring the metrics
+  #metrics
+
+script
+  :coffee-script
+    $('#show-metrics').click (e) ->
+    e.preventDefault()
+    $.getJSON "/metrics.json", {}, (data) ->
+    content =  ""
+    for d in data
+     content +="timestamp: #{d.timestamp}, value: #{d.value}"
+    $('#metrics').append content

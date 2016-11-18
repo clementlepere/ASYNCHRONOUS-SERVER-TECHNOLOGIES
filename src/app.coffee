@@ -1,22 +1,27 @@
-var express = require('express');
-var app = express();
+# Import a module
+http = require 'http'
+user = require './user.coffee'
+url = require 'url'
+fs = require 'fs'
+express = require 'express'
+metrics = require './metrics.coffee'
+app = express()
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
+app.set 'port', 1337
+app.listen app.get('port'), () ->
+	console.log "server listening on #{app.get 'port'}"
 
-app.post('/', function (req, res) {
-  res.send('POST request to homepage');
-});
+app.use '/', express.static "#{__dirname}/../public"
 
-app.put('/', function (req, res) {
-  res.send('PUT request to homepage');
-});
+app.set 'views', "#{__dirname}/../views"
+app.set 'view engine', 'pug'
 
-app.delete('/', function (req, res) {
-  res.send('DELETE request to homepage');
-});
+app.get '/', (req, res) ->
+	res.render 'index', {}
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.get '/metrics.json', (req, res) ->
+	metrics.get (err, data) ->
+		throw next err if err
+		res.status(200).json data
+
+
