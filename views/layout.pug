@@ -1,24 +1,12 @@
 doctype html
-html(lang='en')
-
-head
-  title AST
-  link
-  script
-  script(src='/js/boostrap.min.js')
-
-body
-  p hello#{name}!
-  button(type=
-  "button" class=  "btn btn-success" id=  "show-metrics") Bring the metrics
-  #metrics
-
-script
-  :coffee-script
-    $('#show-metrics').click (e) ->
-    e.preventDefault()
-    $.getJSON "/metrics.json", {}, (data) ->
-    content =  ""
-    for d in data
-     content +="timestamp: #{d.timestamp}, value: #{d.value}"
-    $('#metrics').append content
+html
+  head
+    script(type="text/javascript" src="js/jquery-3.1.1.min.js")
+    script(src='js/bootstrap.min.js')
+    script(src='./src/metrics.coffee')
+    script(src='./src/user.coffee')
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    title My Web Page
+    block head
+  body
+    block content

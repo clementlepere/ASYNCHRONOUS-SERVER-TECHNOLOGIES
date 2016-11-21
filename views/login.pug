@@ -1,0 +1,21 @@
+extends layout
+
+block head
+  title My Site
+
+block content
+  div.container
+    h2.text-center Please login to your account
+    #form.col-md-4.col-sm-8.col-lg-4.center-block(style="float:none")
+      hr
+      form#login(action='/login', method="post")
+        .form-group
+          label Username
+          input.form-control(type='text', name="username")
+        .form-group
+          label Password
+          input.form-control(type='password', name="password")
+        button#login_submit.btn.btn-primary.btn-block(type='submit') Connect
+        i.icon-ok.icon-white 
+      hr
+      button.btn.btn-success.btn-block(type='button', href='/signup' onClick='document.location.href="/signup"') Create an account
