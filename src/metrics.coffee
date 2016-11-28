@@ -1,5 +1,6 @@
 levelup = require 'levelup'
 levelws = require 'level-ws'
+metric = require '../src/metrics'
 db = require('./db')("#{__dirname}/../db/metrics")
 
 

@@ -46,8 +46,6 @@ app.post '/login', urlencodedParser, (req, res) ->
     else
       res.redirect '/login'
   
-
-
 app.get '/list/:username', (req, res) ->
   user.get req.params.username, (err, data) ->
     throw next err if err
@@ -91,19 +89,6 @@ app.delete "/metrics(/:id)?", (req, res) ->
 
 app.get '/hello/:name', (req, res) ->
   res.send "Hello #{req.params.name}"
-
-app.use middleware
-  app.get '/myroute', middleware, (req, res) ->
-    # route logic
-
-router = express.Router()
-router.use middleware
-
-
-router.get '/myroute', (req, res) ->
-  # route logic
-app.use router
-
 
 app.listen app.get('port'), () ->
   console.log "listening on port #{app.get 'port' }"
