@@ -1,12 +1,10 @@
 doctype html
-html
-  head
-    script(type="text/javascript" src="js/jquery-3.1.1.min.js")
-    script(src='js/bootstrap.min.js')
-    script(src='./src/metrics.coffee')
-    script(src='./src/user.coffee')
-    link(rel='stylesheet', href='/css/bootstrap.min.css')
-    title My Web Page
-    block head
-  body
-    block content
+
+block head
+	link(rel="stylesheet" href="css/bootstrap.min.css")
+	script(type="text/javascript" src="js/jquery-2.1.4.min.js" charset="utf-8")
+	script(type="text/javascript" src="js/bootstrap.min.js" charset="utf-8")
+	script(type="text/javascript" src="https://d3js.org/d3.v3.js" charset="utf-8")
+	title My Site
+	
+block content

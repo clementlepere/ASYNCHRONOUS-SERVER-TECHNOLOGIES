@@ -1,26 +1,100 @@
+extends layout
 
 block head
+	link(rel="stylesheet" href="css/bootstrap.min.css")
 	script(type="text/javascript" src="js/jquery-2.1.4.min.js" charset="utf-8")
 	script(type="text/javascript" src="js/bootstrap.min.js" charset="utf-8")
-	link(rel='stylesheet', href='/css/bootstrap.min.css')
+	script(type="text/javascript" src="https://d3js.org/d3.v3.js" charset="utf-8")
 	title My Site
 
-block content
-	div.container
-		div.col-md-6.col-md-offset-3
-			p hello world !
-			button(type="button" class="btn btn-success" id="show-metrics") Bring the metrics
-			button.btn.btn-danger(href='/logout' onClick='document.location.href="/logout"') Logout
 
-			#metrics
+block content
+	.container
+		.row
+			#content
+				#chart(style="display:none")
+					svg(id="visualisation" width="1000" height="500")
+				#form-metric
+					button(id="affiche-form" type="button" class="btn btn-default") Insérer des métriques
+					form(id="insert-metric" style="display:none" name="metrics" action="/insert" method="post")
+						.form-group
+							label(for="timestamp1") timestamp
+								input(type="number" class="form-control" name="timestamp1" id="timestamp1" required)
+							label(for="value1") Valeur de la métrique
+								input(type="number" class="form-control" name="value1" id="value1" required)
+						button(id="submit-metrics" class="btn btn-secondary") Valider
+
+		.tab
+				button(type="button" class="btn btn-success" id="show-metrics") Visualiser les métriques
+				button.btn.btn-danger(href='/logout' onClick='document.location.href="/logout"') Logout
+
+
+
 
 	script
 		:coffee-script
-			$('#show-metrics').click (e) ->
-				e.preventDefault()
-				$.getJSON "/metrics.json", {}, (data) ->
-					content = ""
-					for d in data
+			InitChart = (barData)->
+				vis = d3.select('#visualisation')
+				WIDTH = 1000
+				HEIGHT = 500
+				MARGINS = {top: 20, right: 20,bottom: 20,left: 50}
+				xRange = d3.scale.ordinal().rangeRoundBands([MARGINS.left, WIDTH - MARGINS.right], 0.1).domain(barData.map (d) ->
+					return d.x;
+				)
+				yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([0,d3.max barData, (d) ->
+					return d.y;
+				])
+				xAxis = d3.svg.axis().scale(xRange).tickSize(5).tickSubdivide(true)
+				yAxis = d3.svg.axis().scale(yRange).tickSize(5).orient("left").tickSubdivide(true)
+				vis.append('svg:g').attr('class', 'x axis').attr('transform', 'translate(0,' + (HEIGHT - MARGINS.bottom) + ')').call(xAxis)
+				vis.append('svg:g').attr('class', 'y axis').attr('transform', 'translate(' + (MARGINS.left) + ',0)').call(yAxis)
+				vis.selectAll('rect').data(barData).enter().append('rect').attr 'x', (d) ->
+					return xRange(d.x)
+				.attr 'y', (d) ->
+					return yRange(d.y)
+				.attr('width', xRange.rangeBand())
+				.attr 'height', (d) ->
+					return ((HEIGHT - MARGINS.bottom) - yRange(d.y));
+				.attr('fill', 'grey')
+				.on 'mouseover',(d)->
+					d3.select(this)
+					.attr('fill','blue');
+				.on 'mouseout', (d) ->
+					d3.select(this)
+					.attr 'fill','grey'
 
-						content += "timestamp: #{d.timestamp}, value: #{d.value}"
-						$('#metrics').append content
+			$('#affiche-form').click ()->
+				$('#insert-metric').fadeToggle()
+
+			$('#show-metrics').click (e) ->
+				metrics=[]
+				e.preventDefault()
+				$('#chart').fadeToggle()
+				d3.json '/metrics.json', InitChart
+
+			$('#insert-metric').submit (e)->
+				e.preventDefault()
+				pseudo = $('#value1').val();
+				timestamp = $('#timestamp1').val();
+				console.log pseudo;
+				console.log timestamp;
+				console.log 'attr', $(this).attr 'action';
+				data = {}
+				$(this).serializeArray().map (x) -> 
+					data[x.name] = x.value
+				console.log 'data', JSON.stringify  data
+
+				$.ajax
+					type : "POST"
+					url : $(this).attr 'action'
+					contentType: 'application/json'
+					data : JSON.stringify data
+					dataType : 'json'
+					error : ()->
+						console.log timestamp;
+						#alert 'une erreur s\'est produite'
+					success: ()->
+						alert 'enregistré avec succès!'
+
+
+					

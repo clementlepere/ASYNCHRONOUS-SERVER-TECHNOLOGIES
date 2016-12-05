@@ -11,10 +11,10 @@ LevelStore = require('level-session-store')(session)
 app = express()
 
 app.use morgan 'dev'
-app.set 'port', 8087
+app.set 'port', 1337
 
-urljsonParser =  bodyparser.json()
 urlencodedParser = bodyparser.urlencoded({extended:true})
+urljsonParser =  bodyparser.json()
 
 #tell express to use pug views
 app.set('view engine', 'pug')
@@ -77,6 +77,31 @@ app.get "/metrics(/:id)?", (req, res) ->
     throw next err if err
     res.status(200).json data
 
+app.get '/metrics.json', (req,res) ->
+  metrics.get req.session.username, (err, metric)->
+    res.status(200).json metric
+
+app.post '/insert', (req,res)->
+  console.log req
+  console.log "body:", req.body
+  met =
+  [
+    {
+      timestamp: req.body.timestamp1,
+      value: req.body.value1
+    }
+  ]
+  metrics.save req.session.username, met, (err)->
+    if err
+      res.status(500)
+    else
+      res.status(200)
+
+app.post '/', (req, res, next) ->
+  console.log(req.body)
+  res.json(req.body)
+
+
 app.post "/metrics/:id", urlencodedParser, (req, res) ->
   metrics.save req.params.id, req.body, (err) ->
     throw next err if err
@@ -86,9 +111,6 @@ app.delete "/metrics(/:id)?", (req, res) ->
   metrics.remove req.params.id, (err) ->
     throw next err if err
     res.status(200).send()
-
-app.get '/hello/:name', (req, res) ->
-  res.send "Hello #{req.params.name}"
 
 app.listen app.get('port'), () ->
   console.log "listening on port #{app.get 'port' }"
