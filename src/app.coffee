@@ -3,22 +3,27 @@ user = require './user'
 metrics = require './metrics'
 url = require 'url'
 express = require 'express'
-bodyparser = require 'body-parser'
 morgan = require 'morgan'
 session = require 'express-session'
 LevelStore = require('level-session-store')(session)
+bodyparser = require 'body-parser'
+
 
 app = express()
+
+urlencodedParser = bodyparser.urlencoded({extended:true})
+#urljsonParser =  bodyparser.json()
 
 app.use morgan 'dev'
 app.set 'port', 1337
 
-urlencodedParser = bodyparser.urlencoded({extended:true})
-urljsonParser =  bodyparser.json()
 
 #tell express to use pug views
 app.set('view engine', 'pug')
 app.set('views', "#{__dirname}/../views")
+
+app.use bodyparser.urlencoded({extended:true})
+app.use bodyparser.json()
 
 app.use '/', express.static "#{__dirname}/../public"
 
@@ -27,6 +32,23 @@ app.use session
   store: new LevelStore '../db/sessions'
   resave: true
   saveUninitialized: true
+
+app.post '/insert', (req,res) ->
+  console.log "insert coffee"
+  console.log "body:", req.body
+  met =
+  [
+    {
+      timestamp: req.body.timestamp1,
+      value: req.body.value1
+    }
+  ]
+
+  metrics.save req.session.username, met, (err)->
+    if err
+      res.status(500)
+    else
+      res.status(200)
 
 app.get '/login', (req, res) ->
   console.log (req.session.username)
@@ -80,22 +102,6 @@ app.get "/metrics(/:id)?", (req, res) ->
 app.get '/metrics.json', (req,res) ->
   metrics.get req.session.username, (err, metric)->
     res.status(200).json metric
-
-app.post '/insert', (req,res)->
-  console.log req
-  console.log "body:", req.body
-  met =
-  [
-    {
-      timestamp: req.body.timestamp1,
-      value: req.body.value1
-    }
-  ]
-  metrics.save req.session.username, met, (err)->
-    if err
-      res.status(500)
-    else
-      res.status(200)
 
 app.post '/', (req, res, next) ->
   console.log(req.body)

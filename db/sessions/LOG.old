@@ -1,14 +1,14 @@
-2016/12/05-12:32:31.057 fb8 Recovering log #64
-2016/12/05-12:32:31.061 fb8 Level-0 table #66: started
-2016/12/05-12:32:31.243 fb8 Level-0 table #66: 1710 bytes OK
-2016/12/05-12:32:31.334 fb8 Delete type=0 #64
-2016/12/05-12:32:31.334 fb8 Delete type=3 #62
-2016/12/05-12:32:31.334 1ad0 Compacting 4@0 + 1@1 files
-2016/12/05-12:32:31.401 1ad0 Generated table #68@0: 5 keys, 476 bytes
-2016/12/05-12:32:31.401 1ad0 Compacted 4@0 + 1@1 files => 476 bytes
-2016/12/05-12:32:31.445 1ad0 compacted to: files[ 0 1 0 0 0 0 0 ]
-2016/12/05-12:32:31.445 1ad0 Delete type=2 #55
-2016/12/05-12:32:31.445 1ad0 Delete type=2 #57
-2016/12/05-12:32:31.445 1ad0 Delete type=2 #60
-2016/12/05-12:32:31.445 1ad0 Delete type=2 #63
-2016/12/05-12:32:31.445 1ad0 Delete type=2 #66
+2016/12/16-18:09:08.971 c3c Recovering log #116
+2016/12/16-18:09:08.971 c3c Level-0 table #118: started
+2016/12/16-18:09:09.017 c3c Level-0 table #118: 187 bytes OK
+2016/12/16-18:09:09.096 c3c Delete type=0 #116
+2016/12/16-18:09:09.096 c3c Delete type=3 #114
+2016/12/16-18:09:09.096 1d90 Compacting 4@0 + 1@1 files
+2016/12/16-18:09:09.127 1d90 Generated table #120@0: 7 keys, 607 bytes
+2016/12/16-18:09:09.127 1d90 Compacted 4@0 + 1@1 files => 607 bytes
+2016/12/16-18:09:09.158 1d90 compacted to: files[ 0 1 0 0 0 0 0 ]
+2016/12/16-18:09:09.174 1d90 Delete type=2 #107
+2016/12/16-18:09:09.174 1d90 Delete type=2 #109
+2016/12/16-18:09:09.174 1d90 Delete type=2 #112
+2016/12/16-18:09:09.174 1d90 Delete type=2 #115
+2016/12/16-18:09:09.174 1d90 Delete type=2 #118
